@@ -11,8 +11,6 @@
 
 namespace dektrium\user\migrations;
 
-use Yii;
-
 /**
  * @author Dmitry Erofeev <dmeroff@gmail.com>
  */
@@ -30,7 +28,7 @@ class Migration extends \yii\db\Migration
     {
         parent::init();
 
-        switch (Yii::$app->db->driverName) {
+        switch (\Yii::$app->db->driverName) {
             case 'mysql':
                 $this->tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
                 break;

@@ -1,10 +1,10 @@
 <?php
 
-/*
+/* 
  * This file is part of the Dektrium project
- *
+ * 
  * (c) Dektrium project <http://github.com/dektrium>
- *
+ * 
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -16,7 +16,7 @@ use yii\bootstrap\Nav;
 <?= Nav::widget([
     'options' => [
         'class' => 'nav-tabs',
-        'style' => 'margin-bottom: 15px',
+        'style' => 'margin-bottom: 15px'
     ],
     'items' => [
         [
@@ -24,8 +24,8 @@ use yii\bootstrap\Nav;
             'url'     => ['/user/admin/index'],
         ],
         [
-            'label'   => Yii::t('user', 'Roles'),
-            'url'     => ['/rbac/role/index'],
+            'label' => Yii::t('user', 'Roles'),
+            'url'   => ['/rbac/role/index'],
             'visible' => isset(Yii::$app->extensions['dektrium/yii2-rbac']),
         ],
         [
@@ -49,8 +49,8 @@ use yii\bootstrap\Nav;
                     'label' => Yii::t('user', 'New permission'),
                     'url'   => ['/rbac/permission/create'],
                     'visible' => isset(Yii::$app->extensions['dektrium/yii2-rbac']),
-                ],
-            ],
-        ],
-    ],
+                ]
+            ]
+        ]
+    ]
 ]) ?>

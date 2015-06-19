@@ -10,8 +10,9 @@
  */
 
 /**
- * @var dektrium\user\Module $module
+ * @var $module dektrium\user\Module
  */
+
 ?>
 
 <?php if ($module->enableFlashMessages): ?>

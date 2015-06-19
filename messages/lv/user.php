@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Message translations.
  *
@@ -98,6 +97,7 @@ return [
     'New email' => 'Jauns epasts',
     'New password' => 'Jauna parole',
     'If you did not make this request you can ignore this email' => 'Ja jūs neesat veikušī šo pieprasījumu, tag ignorējiet šo epastu',
+    'If you did not make this request you can ignore this email' => 'Ja jūs neesat veikušī šo pieprasījumu, tag ignorējiet šo epastu',
     'Password' => 'Parole',
     'Password has been changed' => 'parole ir nomainīta',
     'Please click the link below to complete your password reset' => 'Lai atjaunotu paroli, nospiediet uz interneta adresi zemāk',
@@ -148,6 +148,7 @@ return [
     'Your account has been blocked' => 'Jūsu konts tika bloķēts',
     'Your account on {0} has been created' => 'Jūsu konts sistēmā "{0}" ir veiksmīgi izveidots un uzģenerēta parole',
     'Your confirmation token is invalid or expired' => 'Jūsu aktivizēšanas tokens ir nepareizs vai beidzies termiņš',
+    'Your email address has been changed' => 'Jūsu epasta adrese ir nomainīta',
     'Your email address has been changed' => 'Jūsu epasta adrese ir nomainīta',
     '{0, date, MMMM dd, YYYY HH:mm}' => '{0, date, MMMM dd, YYYY HH:mm}',
 ];

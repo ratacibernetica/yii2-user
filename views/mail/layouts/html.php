@@ -9,9 +9,11 @@
  * file that was distributed with this source code.
  */
 
+use yii\mail\BaseMessage;
+
 /**
- * @var \yii\web\View        $this
- * @var yii\mail\BaseMessage $content
+ * @var \yii\web\View $this
+ * @var BaseMessage $content
  */
 ?>
 <?php $this->beginPage() ?>

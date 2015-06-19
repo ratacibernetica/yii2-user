@@ -11,7 +11,6 @@
 
 namespace dektrium\user\models;
 
-use Yii;
 use yii\db\ActiveRecord;
 
 /**
@@ -25,7 +24,6 @@ use yii\db\ActiveRecord;
  * @property string  $location
  * @property string  $website
  * @property string  $bio
- * @property User    $user
  *
  * @author Dmitry Erofeev <dmeroff@gmail.com
  */
@@ -37,7 +35,7 @@ class Profile extends ActiveRecord
     /** @inheritdoc */
     public function init()
     {
-        $this->module = Yii::$app->getModule('user');
+        $this->module = \Yii::$app->getModule('user');
     }
 
     /** @inheritdoc */
@@ -68,12 +66,12 @@ class Profile extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'name'           => Yii::t('user', 'Name'),
-            'public_email'   => Yii::t('user', 'Email (public)'),
-            'gravatar_email' => Yii::t('user', 'Gravatar email'),
-            'location'       => Yii::t('user', 'Location'),
-            'website'        => Yii::t('user', 'Website'),
-            'bio'            => Yii::t('user', 'Bio'),
+            'name'           => \Yii::t('user', 'Name'),
+            'public_email'   => \Yii::t('user', 'Email (public)'),
+            'gravatar_email' => \Yii::t('user', 'Gravatar email'),
+            'location'       => \Yii::t('user', 'Location'),
+            'website'        => \Yii::t('user', 'Website'),
+            'bio'            => \Yii::t('user', 'Bio'),
         ];
     }
 
@@ -84,7 +82,6 @@ class Profile extends ActiveRecord
             if ($this->isAttributeChanged('gravatar_email')) {
                 $this->setAttribute('gravatar_id', md5(strtolower($this->getAttribute('gravatar_email'))));
             }
-
             return true;
         }
 

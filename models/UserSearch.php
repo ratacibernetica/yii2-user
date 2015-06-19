@@ -12,7 +12,6 @@
 namespace dektrium\user\models;
 
 use dektrium\user\Finder;
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
@@ -27,7 +26,7 @@ class UserSearch extends Model
     /** @var string */
     public $email;
 
-    /** @var int */
+    /** @var integer */
     public $created_at;
 
     /** @var string */
@@ -38,7 +37,7 @@ class UserSearch extends Model
 
     /**
      * @param Finder $finder
-     * @param array  $config
+     * @param array $config
      */
     public function __construct(Finder $finder, $config = [])
     {
@@ -51,7 +50,7 @@ class UserSearch extends Model
     {
         return [
             'fieldsSafe' => [['username', 'email', 'registration_ip', 'created_at'], 'safe'],
-            'createdDefault' => ['created_at', 'default', 'value' => null],
+            'createdDefault' => ['created_at', 'default', 'value' => null]
         ];
     }
 
@@ -59,16 +58,15 @@ class UserSearch extends Model
     public function attributeLabels()
     {
         return [
-            'username'        => Yii::t('user', 'Username'),
-            'email'           => Yii::t('user', 'Email'),
-            'created_at'      => Yii::t('user', 'Registration time'),
-            'registration_ip' => Yii::t('user', 'Registration ip'),
+            'username'        => \Yii::t('user', 'Username'),
+            'email'           => \Yii::t('user', 'Email'),
+            'created_at'      => \Yii::t('user', 'Registration time'),
+            'registration_ip' => \Yii::t('user', 'Registration ip'),
         ];
     }
 
     /**
      * @param $params
-     *
      * @return ActiveDataProvider
      */
     public function search($params)
@@ -82,12 +80,12 @@ class UserSearch extends Model
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
-
+        
         if ($this->created_at !== null) {
             $date = strtotime($this->created_at);
             $query->andFilterWhere(['between', 'created_at', $date, $date + 3600 * 24]);
         }
-
+        
         $query->andFilterWhere(['like', 'username', $this->username])
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['registration_ip' => $this->registration_ip]);

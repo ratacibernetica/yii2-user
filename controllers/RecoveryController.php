@@ -14,11 +14,10 @@ namespace dektrium\user\controllers;
 use dektrium\user\Finder;
 use dektrium\user\models\RecoveryForm;
 use dektrium\user\models\Token;
-use dektrium\user\traits\AjaxValidationTrait;
-use Yii;
-use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
+use dektrium\user\traits\AjaxValidationTrait;
 
 /**
  * RecoveryController manages password recovery process.
@@ -30,7 +29,7 @@ use yii\web\NotFoundHttpException;
 class RecoveryController extends Controller
 {
     use AjaxValidationTrait;
-
+    
     /** @var Finder */
     protected $finder;
 
@@ -53,37 +52,44 @@ class RecoveryController extends Controller
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
-                    ['allow' => true, 'actions' => ['request', 'reset'], 'roles' => ['?']],
+                    ['allow' => true, 'actions' => ['request', 'reset'], 'roles' => ['?'],
+                        'matchCallback' => function () {
+                            return !\Yii::$app->watchdog->isBanned();
+                        }],
                 ],
+                'denyCallback' => function () {
+                    throw new \yii\web\ForbiddenHttpException(\Yii::t('watchdog', 'Se ha detectado un intento malicioso, su equipo ha"
+                    . " sido bloqueado'));
+                },
             ],
         ];
     }
 
     /**
      * Shows page where user can request password recovery.
-     *
      * @return string
      * @throws \yii\web\NotFoundHttpException
      */
     public function actionRequest()
     {
         if (!$this->module->enablePasswordRecovery) {
-            throw new NotFoundHttpException();
+            throw new NotFoundHttpException;
         }
 
-        /** @var RecoveryForm $model */
-        $model = Yii::createObject([
+        $model = \Yii::createObject([
             'class'    => RecoveryForm::className(),
             'scenario' => 'request',
         ]);
 
         $this->performAjaxValidation($model);
 
-        if ($model->load(Yii::$app->request->post()) && $model->sendRecoveryMessage()) {
+        if ($model->load(\Yii::$app->request->post()) && $model->sendRecoveryMessage()) {
             return $this->render('/message', [
-                'title'  => Yii::t('user', 'Recovery message sent'),
+                'title'  => \Yii::t('user', 'Recovery message sent'),
                 'module' => $this->module,
             ]);
+        }elseif($model->load(\Yii::$app->request->post()) && !$model->sendRecoveryMessage()){
+            \Yii::$app->watchdog->setIntentoFallido('Intento Recuperación de contraseña','RecPass');            
         }
 
         return $this->render('request', [
@@ -93,42 +99,40 @@ class RecoveryController extends Controller
 
     /**
      * Displays page where user can reset password.
-     *
-     * @param int    $id
-     * @param string $code
-     *
+     * @param  integer $id
+     * @param  string  $code
      * @return string
      * @throws \yii\web\NotFoundHttpException
      */
     public function actionReset($id, $code)
     {
         if (!$this->module->enablePasswordRecovery) {
-            throw new NotFoundHttpException();
+            \Yii::$app->watchdog->setIntentoFallido('Intento Uso Token','Token');
+            throw new NotFoundHttpException;            
         }
 
         /** @var Token $token */
         $token = $this->finder->findToken(['user_id' => $id, 'code' => $code, 'type' => Token::TYPE_RECOVERY])->one();
 
         if ($token === null || $token->isExpired || $token->user === null) {
-            Yii::$app->session->setFlash('danger', Yii::t('user', 'Recovery link is invalid or expired. Please try requesting a new one.'));
-
+            \Yii::$app->watchdog->setIntentoFallido('Token iválido o expirado','Token');
+            \Yii::$app->session->setFlash('danger', \Yii::t('user', 'Token inválido  o expirado. Por favor, solicite uno nuevo.'));
             return $this->render('/message', [
-                'title'  => Yii::t('user', 'Invalid or expired link'),
+                'title'  => \Yii::t('user', 'Enlace expirado'),
                 'module' => $this->module,
             ]);
         }
 
-        /** @var RecoveryForm $model */
-        $model = Yii::createObject([
+        $model = \Yii::createObject([
             'class'    => RecoveryForm::className(),
             'scenario' => 'reset',
         ]);
 
         $this->performAjaxValidation($model);
 
-        if ($model->load(Yii::$app->getRequest()->post()) && $model->resetPassword($token)) {
+        if ($model->load(\Yii::$app->getRequest()->post()) && $model->resetPassword($token)) {
             return $this->render('/message', [
-                'title'  => Yii::t('user', 'Password has been changed'),
+                'title'  => \Yii::t('user', 'Password has been changed'),
                 'module' => $this->module,
             ]);
         }

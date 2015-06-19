@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-use dektrium\user\widgets\Connect;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use dektrium\user\widgets\Connect;
 
 /**
  * @var yii\web\View                   $this
@@ -52,18 +52,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php ActiveForm::end(); ?>
             </div>
         </div>
-        <?php if ($module->enableConfirmation): ?>
+        <?php if (1==2)://($module->enableConfirmation): ?>
             <p class="text-center">
                 <?= Html::a(Yii::t('user', 'Didn\'t receive confirmation message?'), ['/user/registration/resend']) ?>
             </p>
         <?php endif ?>
-        <?php if ($module->enableRegistration): ?>
+        <?php if (1==2): ?>
             <p class="text-center">
                 <?= Html::a(Yii::t('user', 'Don\'t have an account? Sign up!'), ['/user/registration/register']) ?>
             </p>
-        <?php endif ?>
         <?= Connect::widget([
-            'baseAuthUrl' => ['/user/security/auth'],
+            'baseAuthUrl' => ['/user/security/auth']
         ]) ?>
+        <?php endif ?>
+        
     </div>
 </div>

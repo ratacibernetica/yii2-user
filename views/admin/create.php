@@ -9,13 +9,15 @@
  * file that was distributed with this source code.
  */
 
+use dektrium\user\models\User;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Nav;
 use yii\helpers\Html;
+use yii\web\View;
 
 /**
- * @var yii\web\View 				$this
- * @var dektrium\user\models\User 	$user
+ * @var View $this
+ * @var User $user
  */
 
 $this->title = Yii::t('user', 'Create a user account');
@@ -36,19 +38,19 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="panel-body">
                 <?= Nav::widget([
                     'options' => [
-                        'class' => 'nav-pills nav-stacked',
+                        'class' => 'nav-pills nav-stacked'
                     ],
                     'items' => [
                         ['label' => Yii::t('user', 'Account details'), 'url' => ['/user/admin/create']],
                         ['label' => Yii::t('user', 'Profile details'), 'options' => [
                             'class' => 'disabled',
-                            'onclick' => 'return false;',
+                            'onclick' => 'return false;'
                         ]],
                         ['label' => Yii::t('user', 'Information'), 'options' => [
                             'class' => 'disabled',
-                            'onclick' => 'return false;',
+                            'onclick' => 'return false;'
                         ]],
-                    ],
+                    ]
                 ]) ?>
             </div>
         </div>
@@ -67,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'fieldConfig' => [
                         'horizontalCssClasses' => [
                             'wrapper' => 'col-sm-9',
-                        ],
+                        ]
                     ],
                 ]); ?>
 

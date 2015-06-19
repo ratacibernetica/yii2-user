@@ -14,9 +14,8 @@ use yii\bootstrap\Nav;
 use yii\web\View;
 
 /**
- * @var View 	$this
- * @var User 	$user
- * @var string 	$content
+ * @var View $this
+ * @var User $user
  */
 
 $this->title = Yii::t('user', 'Update user account');
@@ -37,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="panel-body">
                 <?= Nav::widget([
                     'options' => [
-                        'class' => 'nav-pills nav-stacked',
+                        'class' => 'nav-pills nav-stacked'
                     ],
                     'items' => [
                         ['label' => Yii::t('user', 'Account details'), 'url' => ['/user/admin/update', 'id' => $user->id]],
@@ -56,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'linkOptions' => [
                                 'class' => 'text-success',
                                 'data-method' => 'post',
-                                'data-confirm' => Yii::t('user', 'Are you sure you want to confirm this user?'),
+                                'data-confirm' => Yii::t('user', 'Are you sure you want to confirm this user?')
                             ],
                         ],
                         [
@@ -66,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'linkOptions' => [
                                 'class' => 'text-danger',
                                 'data-method' => 'post',
-                                'data-confirm' => Yii::t('user', 'Are you sure you want to block this user?'),
+                                'data-confirm' => Yii::t('user', 'Are you sure you want to block this user?')
                             ],
                         ],
                         [
@@ -76,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'linkOptions' => [
                                 'class' => 'text-success',
                                 'data-method' => 'post',
-                                'data-confirm' => Yii::t('user', 'Are you sure you want to unblock this user?'),
+                                'data-confirm' => Yii::t('user', 'Are you sure you want to unblock this user?')
                             ],
                         ],
                         [
@@ -85,10 +84,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'linkOptions' => [
                                 'class' => 'text-danger',
                                 'data-method' => 'post',
-                                'data-confirm' => Yii::t('user', 'Are you sure you want to delete this user?'),
+                                'data-confirm' => Yii::t('user', 'Are you sure you want to delete this user?')
                             ],
                         ],
-                    ],
+                    ]
                 ]) ?>
             </div>
         </div>

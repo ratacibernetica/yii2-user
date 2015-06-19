@@ -22,7 +22,7 @@ use yii\base\Module as BaseModule;
  */
 class Module extends BaseModule
 {
-    const VERSION = '1.0.0-dev';
+    const VERSION = '0.9.4';
 
     /** Email is changed right after user enter's new email address. */
     const STRATEGY_INSECURE = 0;
@@ -51,7 +51,7 @@ class Module extends BaseModule
     /** @var bool Whether to enable password recovery. */
     public $enablePasswordRecovery = true;
 
-    /** @var int Email changing strategy. */
+    /** @var integer Email changing strategy. */
     public $emailChangeStrategy = self::STRATEGY_DEFAULT;
 
     /** @var int The time you want the user will be remembered without asking for credentials. */
@@ -77,19 +77,18 @@ class Module extends BaseModule
 
     /**
      * @var string The prefix for user module URL.
-     *
      * @See [[GroupUrlRule::prefix]]
      */
     public $urlPrefix = 'user';
 
     /** @var array The rules to be used in URL management. */
     public $urlRules = [
-        '<id:\d+>'                               => 'profile/show',
-        '<action:(login|logout)>'                => 'security/<action>',
-        '<action:(register|resend)>'             => 'registration/<action>',
-        'confirm/<id:\d+>/<code:[A-Za-z0-9_-]+>' => 'registration/confirm',
-        'forgot'                                 => 'recovery/request',
-        'recover/<id:\d+>/<code:[A-Za-z0-9_-]+>' => 'recovery/reset',
-        'settings/<action:\w+>'                  => 'settings/<action>'
+        '<id:\d+>'                    => 'profile/show',
+        '<action:(login|logout)>'     => 'security/<action>',
+        '<action:(register|resend)>'  => 'registration/<action>',
+        'confirm/<id:\d+>/<code:\w+>' => 'registration/confirm',
+        'forgot'                      => 'recovery/request',
+        'recover/<id:\d+>/<code:\w+>' => 'recovery/reset',
+        'settings/<action:\w+>'       => 'settings/<action>'
     ];
 }

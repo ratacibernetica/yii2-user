@@ -12,7 +12,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/*
+/**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
  * @var dektrium\user\models\RecoveryForm $model
@@ -30,8 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="panel-body">
                 <?php $form = ActiveForm::begin([
                     'id'                     => 'password-recovery-form',
-                    'enableAjaxValidation'   => true,
-                    'enableClientValidation' => false,
+                    'enableAjaxValidation'   => false,
+                    'enableClientValidation' => false
                 ]); ?>
 
                 <?= $form->field($model, 'email')->textInput(['autofocus' => true]) ?>

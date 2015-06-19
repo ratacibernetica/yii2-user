@@ -11,8 +11,6 @@
 
 namespace dektrium\user\helpers;
 
-use Yii;
-
 /**
  * Password helper.
  *
@@ -24,12 +22,11 @@ class Password
      * Wrapper for yii security helper method.
      *
      * @param $password
-     *
      * @return string
      */
     public static function hash($password)
     {
-        return Yii::$app->security->generatePasswordHash($password, Yii::$app->getModule('user')->cost);
+        return \Yii::$app->security->generatePasswordHash($password, \Yii::$app->getModule('user')->cost);
     }
 
     /**
@@ -37,22 +34,18 @@ class Password
      *
      * @param $password
      * @param $hash
-     *
      * @return bool
      */
     public static function validate($password, $hash)
     {
-        return Yii::$app->security->validatePassword($password, $hash);
+        return \Yii::$app->security->validatePassword($password, $hash);
     }
 
     /**
      * Generates user-friendly random password containing at least one lower case letter, one uppercase letter and one
      * digit. The remaining characters in the password are chosen at random from those three sets.
-     *
      * @see https://gist.github.com/tylerhall/521810
-     *
      * @param $length
-     *
      * @return string
      */
     public static function generate($length)
@@ -60,7 +53,7 @@ class Password
         $sets = [
             'abcdefghjkmnpqrstuvwxyz',
             'ABCDEFGHJKMNPQRSTUVWXYZ',
-            '23456789',
+            '23456789'
         ];
         $all = '';
         $password = '';

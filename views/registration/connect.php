@@ -12,7 +12,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/*
+/**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
  * @var dektrium\user\models\User $model
@@ -38,15 +38,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     'id' => 'connect-account-form',
                 ]); ?>
 
-                <?= $form->field($model, 'email') ?>
-
+                <?= $form->field($model, 'email')->textInput(['value'=>$email]) ?>
+                <div class="form-group " style="text-align:center">
+                    <label class="control-label" for="register-form-password">Busco:</label>
+                <?= Html::radioList('Rol','Empleado', [
+                    "Empleado"=>"Trabajo",
+                    "Empleador"=>"Empleados",                    
+                ]) ?>
+                </div>
                 <?= Html::submitButton(Yii::t('user', 'Continue'), ['class' => 'btn btn-success btn-block']) ?>
 
                 <?php ActiveForm::end(); ?>
             </div>
         </div>
         <p class="text-center">
-            <?= Html::a(Yii::t('user', 'If you already registered, sign in and connect this account on settings page'), ['/user/settings/networks']) ?>.
+            <?php // Html::a(Yii::t('user', 'If you already registered, sign in and connect this account on settings page'), ['/user/settings/networks']) ?>.
         </p>
     </div>
 </div>

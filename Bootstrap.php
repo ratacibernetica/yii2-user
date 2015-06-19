@@ -11,12 +11,13 @@
 
 namespace dektrium\user;
 
-use Yii;
 use yii\authclient\Collection;
 use yii\base\BootstrapInterface;
-use yii\console\Application as ConsoleApplication;
+use yii\base\InvalidConfigException;
 use yii\i18n\PhpMessageSource;
 use yii\web\GroupUrlRule;
+use yii\console\Application as ConsoleApplication;
+use yii\web\User;
 
 /**
  * Bootstrap class registers module and user application component. It also creates some url rules which will be applied
@@ -43,32 +44,31 @@ class Bootstrap implements BootstrapInterface
     /** @inheritdoc */
     public function bootstrap($app)
     {
-        /** @var Module $module */
-        /** @var \yii\db\ActiveRecord $modelName */
+        /** @var $module Module */
         if ($app->hasModule('user') && ($module = $app->getModule('user')) instanceof Module) {
             $this->_modelMap = array_merge($this->_modelMap, $module->modelMap);
             foreach ($this->_modelMap as $name => $definition) {
                 $class = "dektrium\\user\\models\\" . $name;
-                Yii::$container->set($class, $definition);
+                \Yii::$container->set($class, $definition);
                 $modelName = is_array($definition) ? $definition['class'] : $definition;
                 $module->modelMap[$name] = $modelName;
                 if (in_array($name, ['User', 'Profile', 'Token', 'Account'])) {
-                    Yii::$container->set($name . 'Query', function () use ($modelName) {
+                    \Yii::$container->set($name . 'Query', function () use ($modelName) {
                         return $modelName::find();
                     });
                 }
             }
-            Yii::$container->setSingleton(Finder::className(), [
-                'userQuery'    => Yii::$container->get('UserQuery'),
-                'profileQuery' => Yii::$container->get('ProfileQuery'),
-                'tokenQuery'   => Yii::$container->get('TokenQuery'),
-                'accountQuery' => Yii::$container->get('AccountQuery'),
+            \Yii::$container->setSingleton(Finder::className(), [
+                'userQuery'    => \Yii::$container->get('UserQuery'),
+                'profileQuery' => \Yii::$container->get('ProfileQuery'),
+                'tokenQuery'   => \Yii::$container->get('TokenQuery'),
+                'accountQuery' => \Yii::$container->get('AccountQuery'),
             ]);
 
             if ($app instanceof ConsoleApplication) {
                 $module->controllerNamespace = 'dektrium\user\commands';
             } else {
-                Yii::$container->set('yii\web\User', [
+                \Yii::$container->set('yii\web\User', [
                     'enableAutoLogin' => true,
                     'loginUrl'        => ['/user/security/login'],
                     'identityClass'   => $module->modelMap['User'],
@@ -76,14 +76,14 @@ class Bootstrap implements BootstrapInterface
 
                 $configUrlRule = [
                     'prefix' => $module->urlPrefix,
-                    'rules'  => $module->urlRules,
+                    'rules'  => $module->urlRules
                 ];
 
                 if ($module->urlPrefix != 'user') {
                     $configUrlRule['routePrefix'] = 'user';
                 }
 
-                $app->urlManager->addRules([new GroupUrlRule($configUrlRule)], false);
+                $app->get('urlManager')->rules[] = new GroupUrlRule($configUrlRule);
 
                 if (!$app->has('authClientCollection')) {
                     $app->set('authClientCollection', [
@@ -100,13 +100,14 @@ class Bootstrap implements BootstrapInterface
             }
 
             $defaults = [
-                'welcomeSubject'        => Yii::t('user', 'Welcome to {0}', Yii::$app->name),
-                'confirmationSubject'   => Yii::t('user', 'Confirm account on {0}', Yii::$app->name),
-                'reconfirmationSubject' => Yii::t('user', 'Confirm email change on {0}', Yii::$app->name),
-                'recoverySubject'       => Yii::t('user', 'Complete password reset on {0}', Yii::$app->name),
+                'welcomeSubject'        => \Yii::t('user', 'Welcome to {0}', \Yii::$app->name),
+                'confirmationSubject'   => \Yii::t('user', 'Confirm account on {0}', \Yii::$app->name),
+                'reconfirmationSubject' => \Yii::t('user', 'Confirm email change on {0}', \Yii::$app->name),
+                'recoverySubject'       => \Yii::t('user', 'Complete password reset on {0}', \Yii::$app->name)
             ];
 
-            Yii::$container->set('dektrium\user\Mailer', array_merge($defaults, $module->mailer));
+            \Yii::$container->set('dektrium\user\Mailer', array_merge($defaults, $module->mailer));
         }
+        
     }
 }

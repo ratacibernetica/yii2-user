@@ -14,7 +14,6 @@ namespace dektrium\user\controllers;
 use dektrium\user\Finder;
 use dektrium\user\models\LoginForm;
 use dektrium\user\Module;
-use dektrium\user\traits\AjaxValidationTrait;
 use Yii;
 use yii\authclient\AuthAction;
 use yii\authclient\ClientInterface;
@@ -23,6 +22,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\Response;
+use dektrium\user\traits\AjaxValidationTrait;
 
 /**
  * Controller that manages user authentication process.
@@ -57,16 +57,27 @@ class SecurityController extends Controller
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
-                    ['allow' => true, 'actions' => ['login', 'auth'], 'roles' => ['?']],
-                    ['allow' => true, 'actions' => ['login', 'auth', 'logout'], 'roles' => ['@']],
+
+                    ['allow' => true, 'actions' => ['login', 'auth'], 'roles' => ['?'] , 
+                        'matchCallback' => function () {
+                            return !\Yii::$app->watchdog->isBanned();
+                        }],
+                    ['allow' => true, 'actions' => ['login', 'auth', 'logout'], 'roles' => ['@'],
+                        'matchCallback' => function () {
+                            return !\Yii::$app->watchdog->isBanned();
+                        }],
                 ],
+                'denyCallback' => function () {
+                    throw new \yii\web\ForbiddenHttpException(\Yii::t('watchdog', 'Se ha detectado un intento malicioso, su equipo ha"
+                    . " sido bloqueado'));
+                },
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
+                    'logout' => ['post']
+                ]
+            ]
         ];
     }
 
@@ -78,34 +89,36 @@ class SecurityController extends Controller
                 'class' => AuthAction::className(),
                 // if user is not logged in, will try to log him in, otherwise
                 // will try to connect social account to user.
-                'successCallback' => Yii::$app->user->isGuest
+                'successCallback' => \Yii::$app->user->isGuest
                     ? [$this, 'authenticate']
                     : [$this, 'connect'],
-            ],
+            ]
         ];
     }
 
     /**
      * Displays the login page.
-     *
      * @return string|Response
      */
     public function actionLogin()
     {
-        if (!Yii::$app->user->isGuest) {
+        if (!\Yii::$app->user->isGuest) {
             $this->goHome();
-        }
 
-        /** @var LoginForm $model */
-        $model = Yii::createObject(LoginForm::className());
+        }        
+
+        $model = \Yii::createObject(LoginForm::className());
 
         $this->performAjaxValidation($model);
 
         if ($model->load(Yii::$app->getRequest()->post()) && $model->login()) {
             return $this->goBack();
+
+        }elseif($model->load(Yii::$app->getRequest()->post()) && !$model->login()){
+            \Yii::$app->watchdog->setIntentoFallido();            
         }
 
-        return $this->render('login', [
+        return $this->renderPartial('login', [
             'model'  => $model,
             'module' => $this->module,
         ]);
@@ -113,13 +126,11 @@ class SecurityController extends Controller
 
     /**
      * Logs the user out and then redirects to the homepage.
-     *
      * @return Response
      */
     public function actionLogout()
     {
         Yii::$app->getUser()->logout();
-
         return $this->goHome();
     }
 
@@ -128,19 +139,19 @@ class SecurityController extends Controller
      * this network's account, he will be logged in. Otherwise, it will try
      * to create new user account.
      *
-     * @param ClientInterface $client
+     * @param  ClientInterface $client
      */
     public function authenticate(ClientInterface $client)
     {
         $account = forward_static_call([
             $this->module->modelMap['Account'],
-            'createFromClient',
+            'createFromClient'
         ], $client);
 
         if (null === ($user = $account->user)) {
             $this->action->successUrl = Url::to([
                 '/user/registration/connect',
-                'account_id' => $account->id,
+                'account_id' => $account->id
             ]);
         } else {
             Yii::$app->user->login($user, $this->module->rememberFor);

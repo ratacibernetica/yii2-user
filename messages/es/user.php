@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Message translations.
  *
@@ -43,7 +42,7 @@ return [
     'Credentials will be sent to the user by email' => '',
     'Delete' => '',
     'Don\'t have an account? Sign up!' => '',
-    'In order to finish your registration, we need you to enter your email address' => '',
+    'In order to finish your registration, we need you to enter your email address' => 'Para completar la petición, es necesario que confirmes tu email.',
     'Invalid or expired link' => '',
     'New email' => '',
     'New password' => '',

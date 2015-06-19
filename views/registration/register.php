@@ -11,6 +11,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use dektrium\user\widgets\Connect;
 
 /**
  * @var yii\web\View              $this
@@ -31,24 +32,37 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php $form = ActiveForm::begin([
                     'id'                     => 'registration-form',
                     'enableAjaxValidation'   => true,
-                    'enableClientValidation' => false,
+                    'enableClientValidation' => false
                 ]); ?>
 
-                <?= $form->field($model, 'email') ?>
-
                 <?= $form->field($model, 'username') ?>
+
+                <?= $form->field($model, 'email') ?>
+                
+                
 
                 <?php if ($module->enableGeneratingPassword == false): ?>
                     <?= $form->field($model, 'password')->passwordInput() ?>
                 <?php endif ?>
+                <div class="form-group " style="text-align:center">
+                    <label class="control-label" for="register-form-password">Busco:</label>
+                <?= Html::radioList('Rol','Empleado', [
+                    "Empleado"=>"Trabajo",
+                    "Empleador"=>"Empleados",                    
+                ]) ?>
+                </div>
 
                 <?= Html::submitButton(Yii::t('user', 'Sign up'), ['class' => 'btn btn-success btn-block']) ?>
 
                 <?php ActiveForm::end(); ?>
             </div>
         </div>
+        <?php /* Connect::widget([
+            'baseAuthUrl' => ['/user/security/auth']
+        ]) */?>
         <p class="text-center">
-            <?= Html::a(Yii::t('user', 'Already registered? Sign in!'), ['/user/security/login']) ?>
+            
+            <?php // Html::a(Yii::t('user', 'Already registered? Sign in!'), [ '/user/security/login']) ?>
         </p>
     </div>
 </div>
