@@ -12,6 +12,7 @@
 namespace dektrium\user\controllers;
 
 use dektrium\user\Finder;
+use frontend\models\CatHabilidad;
 use dektrium\user\models\SettingsForm;
 use dektrium\user\Module;
 use yii\web\Controller;
@@ -65,7 +66,7 @@ class SettingsController extends Controller
                 'rules' => [
                     [
                         'allow'   => true,
-                        'actions' => ['profile', 'account', 'confirm', 'networks', 'disconnect'],
+                        'actions' => ['profile', 'account', 'confirm', 'networks', 'disconnect','habilidades'],
                         'roles'   => ['@']
                     ],
                 ]
@@ -91,6 +92,20 @@ class SettingsController extends Controller
         return $this->render('profile', [
             'model' => $model,
         ]);
+    }
+    
+    public function actionHabilidades() {
+        $habilidades = CatHabilidad::model()->find()->
+                where(["idcathabilidadpadre"=>'0'])->all();
+        $html='<ul>';
+        foreach ($habilidades as $habilidad) {
+            if($habilidad->Idcathabilidadpadre == 0)
+               $html .= '<li><div data-category="'.$habilidad->idcathabilidad.'" class="skill-select-bubble">
+                '.$habilidad->cathabnombre.'<span class="fl-icon-chevron-right"></span>
+            </div></li>';
+         }        
+         
+        
     }
 
     /**
